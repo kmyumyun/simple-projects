@@ -2,7 +2,7 @@
   <div>
     <div class="justify-content-end">
       <h5>
-        <router-link class="nav-link" to="/">
+        <router-link class="nav-link" to="/recipe/add">
           <button>Add new Recipe</button>
         </router-link>
       </h5>
