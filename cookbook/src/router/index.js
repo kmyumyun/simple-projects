@@ -6,7 +6,7 @@ import Logout from "../components/auth/Logout.vue";
 import Register from "../components/auth/Register.vue";
 import { AuthService } from "../services/auth.service";
 import RecipeAll from "../components/recipe/RecipeAll.vue";
-import Recipe from "../components/recipe/Recipe";
+import Recipe from "../components/recipe/Recipe.vue";
 
 Vue.use(VueRouter);
 

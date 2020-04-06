@@ -3,24 +3,28 @@
     <a class="navbar-brand r-href">
       <router-link to="/">Cook</router-link>
     </a>
-    <div class="nav nav-navbar" id="navbarNav">
-      <ul class="nav">
-        <li class="nav-item active">
-          <router-link class="nav-link" to="/">Home</router-link>
-        </li>
-      </ul>
-      <ul class="nav justify-content-end">
-        <li class="nav-item" v-if="isLogged == false">
-          <router-link class="nav-link" to="/login">Login</router-link>
-        </li>
-        <li class="nav-item" v-if="isLogged == false">
-          <router-link class="nav-link" to="/register">Register</router-link>
-        </li>
-        <li class="nav-item" v-if="isLogged">
-          <router-link class="nav-link" to="/logout">Logout</router-link>
-        </li>
-      </ul>
-    </div>
+    <ul class="nav mr-auto">
+      <li class="nav-item activ">
+        <router-link class="nav-link" to="/">Home</router-link>
+      </li>
+      <li class="nav-item activ">
+        <router-link class="nav-link" to="/recipe">Recipes</router-link>
+      </li>
+    </ul>
+    <ul class="nav ml-auto">
+      <li class="nav-item" v-if="!isLogged">
+        <router-link class="nav-link" to="/login">Login</router-link>
+      </li>
+      <li class="nav-item" v-if="!isLogged">
+        <router-link class="nav-link" to="/register">Register</router-link>
+      </li>
+       <li class="nav-item" v-if="isLogged">
+        <router-link class="nav-link" to="/profile">Profile</router-link>
+      </li>
+      <li class="nav-item" v-if="isLogged">
+        <router-link class="nav-link" to="/logout">Logout</router-link>
+      </li>
+    </ul>
   </nav>
 </template>
 

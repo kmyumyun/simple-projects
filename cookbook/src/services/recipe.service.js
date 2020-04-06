@@ -17,6 +17,17 @@ async function getAll() {
   return recipes;
 }
 
+async function addNew() {
+  const payload = {
+    title: "Post Test",
+    description: "Post test recipe"
+  };
+  await axiosDb.post(`/recipes.json`, payload).then(res => {
+    console.log(res);
+  });
+}
+
 export const RecipeService = {
-  getAll
+  getAll,
+  addNew
 };
