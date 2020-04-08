@@ -14,7 +14,9 @@
           <div
             v-if="submitted && !$v.form.title.required"
             class="invalid-feedback"
-          >Field is required</div>
+          >
+            Field is required
+          </div>
         </div>
         <div class="form-group">
           <label for="bdescription">Brief Description</label>
@@ -28,39 +30,39 @@
           <div
             v-if="submitted && !$v.form.bdescription.required"
             class="invalid-feedback"
-          >Field is required</div>
+          >
+            Field is required
+          </div>
         </div>
         <div class="row">
           <div class="col-6">
             <div class="form-group">
-              <label for="bdescription">Brief Description</label>
-              <input
-                class="form-control"
-                type="text"
-                v-model="form.bdescription"
-                name="bdescription"
-                :class="{ 'is-invalid': submitted && $v.form.bdescription.$error }"
-              />
+              <select v-model="form.type" class="form-control">
+                <option selected disabled value="-1">Select type</option>
+                <option
+                  v-for="type in types"
+                  :key="type.name"
+                  :value="type.value"
+                  >{{ type.name }}</option
+                >
+              </select>
               <div
-                v-if="submitted && !$v.form.bdescription.required"
+                v-if="submitted && !$v.form.type.valid"
                 class="invalid-feedback"
-              >Field is required</div>
+              >
+                Field is required
+              </div>
             </div>
           </div>
           <div class="col-6">
-            <div class="form-group">
-              <label for="bdescription">Brief Description</label>
+            <div class="form-check">
               <input
-                class="form-control"
-                type="text"
-                v-model="form.bdescription"
-                name="bdescription"
-                :class="{ 'is-invalid': submitted && $v.form.bdescription.$error }"
+                class="form-check-input"
+                type="checkbox"
+                v-model="form.isvegan"
+                name="isvegan"
               />
-              <div
-                v-if="submitted && !$v.form.bdescription.required"
-                class="invalid-feedback"
-              >Field is required</div>
+              <label class="form-check-label" for="isvegan">Is Vegan?</label>
             </div>
           </div>
         </div>
@@ -70,15 +72,14 @@
           <label for="ingredients">Ingredients:</label>
           <textarea
             class="form-control"
-            type="text"
+            type="select"
             v-model="form.ingredients"
             name="ingredients"
             :class="{ 'is-invalid': submitted && $v.form.ingredients.$error }"
           ></textarea>
           <div
             v-if="submitted && !$v.form.ingredients.required"
-            class="invalid-feedback"
-          >Field is required</div>
+            class="invalid-feedback">Field is required</div>
         </div>
       </div>
     </div>
@@ -96,7 +97,9 @@
           <div
             v-if="submitted && !$v.form.instructions.required"
             class="invalid-feedback"
-          >Field is required</div>
+          >
+            Field is required
+          </div>
         </div>
       </div>
     </div>
@@ -107,7 +110,8 @@
 </template>
 
 <script>
-import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
+import resources from "../../resources/resources.json";
 
 export default {
   name: "RecipeAdd",
@@ -117,41 +121,40 @@ export default {
         title: "",
         bdescription: "",
         instructions: "",
-        ingredients: ""
+        ingredients: "",
+        isvegan: false,
+        type: -1
       },
+      types: resources.mealTypes,
       submitted: false
     };
   },
   validations: {
     form: {
-      email: {
-        required,
-        email,
+      title: { required },
+      bdescription: { required },
+      instructions: { required },
+      ingredients: { required },
+      type: {
         valid(value) {
-          if (this.error.status) {
-            if (this.error.taken !== value) {
-              return true;
-            }
-            return false;
-          }
-          return true;
+          return value != -1;
         }
-      },
-      password: { required, minLength: minLength(6) },
-      confirmPassword: { required, sameAs: sameAs("password") }
+      }
     }
   },
   methods: {
     handleSubmit() {
       this.submitted = true;
-    },
-    addIngredient() {}
+    }
   }
 };
 </script>
 
 <style scoped>
 textarea {
-  height: 125px;
+  height: 200px !important;
+}
+.invalid-feedback {
+  display: block !important;
 }
 </style>

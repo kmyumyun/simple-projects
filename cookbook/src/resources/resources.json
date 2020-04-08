@@ -1,0 +1,12 @@
+{
+  "mealTypes": [
+    { "name": "Breakfast", "value": 0 },
+    { "name": "Dinner", "value": 1 },
+    { "name": "Dessert", "value": 2 },
+    { "name": "Salad", "value": 3 },
+    { "name": "Drink", "value": 4 },
+    { "name": "Lunch", "value": 5 },
+    { "name": "Main Course", "value": 6 },
+    { "name": "Bread", "value": 7 }
+  ]
+}
