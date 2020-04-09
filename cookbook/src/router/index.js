@@ -8,6 +8,7 @@ import { AuthService } from "../services/auth.service";
 import RecipeAll from "../components/recipe/RecipeAll.vue";
 import RecipeAdd from "../components/recipe/RecipeAdd.vue";
 import Recipe from "../components/recipe/Recipe.vue";
+import RecipeDetails from "../components/recipe/RecipeDetails.vue";
 
 Vue.use(VueRouter);
 
@@ -52,6 +53,11 @@ const routes = [
       {
         path: "add",
         component: RecipeAdd
+      },
+      {
+        path: "details/:id",
+        name: "details",
+        component: RecipeDetails
       }
     ]
   }

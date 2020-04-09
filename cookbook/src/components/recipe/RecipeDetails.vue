@@ -1,14 +1,26 @@
 <template>
-  <div></div>
+  <div>
+    <div>{{ data.title }}</div>
+    <div>{{ data.bdescription }}</div>
+  </div>
 </template>
 
 <script>
+import { RecipeService } from "../../services/recipe.service";
+
 export default {
   name: "RecipeDetails",
   data() {
-    return {};
+    return {
+      data: {}
+    };
   },
-  methods: {}
+  methods: {},
+  created() {
+    RecipeService.getRecipe(this.$route.params.id).then(data => {
+      this.data = data;
+    });
+  }  
 };
 </script>
 

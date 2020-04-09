@@ -14,9 +14,7 @@
           <div
             v-if="submitted && !$v.form.title.required"
             class="invalid-feedback"
-          >
-            Field is required
-          </div>
+          >Field is required</div>
         </div>
         <div class="form-group">
           <label for="bdescription">Brief Description</label>
@@ -30,38 +28,24 @@
           <div
             v-if="submitted && !$v.form.bdescription.required"
             class="invalid-feedback"
-          >
-            Field is required
-          </div>
+          >Field is required</div>
         </div>
         <div class="row">
           <div class="col-6">
             <div class="form-group">
               <select v-model="form.type" class="form-control">
                 <option selected disabled value="-1">Select type</option>
-                <option
-                  v-for="type in types"
-                  :key="type.name"
-                  :value="type.value"
-                  >{{ type.name }}</option
-                >
+                <option v-for="type in types" :key="type.name" :value="type.value">{{ type.name }}</option>
               </select>
               <div
                 v-if="submitted && !$v.form.type.valid"
                 class="invalid-feedback"
-              >
-                Field is required
-              </div>
+              >Field is required</div>
             </div>
           </div>
           <div class="col-6">
             <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                v-model="form.isvegan"
-                name="isvegan"
-              />
+              <input class="form-check-input" type="checkbox" v-model="form.isvegan" name="isvegan" />
               <label class="form-check-label" for="isvegan">Is Vegan?</label>
             </div>
           </div>
@@ -79,7 +63,8 @@
           ></textarea>
           <div
             v-if="submitted && !$v.form.ingredients.required"
-            class="invalid-feedback">Field is required</div>
+            class="invalid-feedback"
+          >Field is required</div>
         </div>
       </div>
     </div>
@@ -97,11 +82,26 @@
           <div
             v-if="submitted && !$v.form.instructions.required"
             class="invalid-feedback"
-          >
-            Field is required
-          </div>
+          >Field is required</div>
         </div>
       </div>
+    </div>
+    <div>
+      <div>
+        <p>Upload an image to Firebase:</p>
+        <input type="file" @change="previewImage" accept="image/*" />
+      </div>
+      <div>
+        <p>
+          Progress: {{ uploadValue.toFixed() + "%" }}
+          <progress
+            id="progress"
+            :value="uploadValue"
+            max="100"
+          ></progress>
+        </p>
+      </div>
+      <div v-if="submitted && imageData == null" class="invalid-feedback">Image is required</div>
     </div>
     <div class="form-group">
       <button class="btn btn-primary">Create Recipe</button>
@@ -112,6 +112,8 @@
 <script>
 import { required } from "vuelidate/lib/validators";
 import resources from "../../resources/resources.json";
+import { RecipeService } from "../../services/recipe.service";
+import firebase from "firebase";
 
 export default {
   name: "RecipeAdd",
@@ -123,10 +125,15 @@ export default {
         instructions: "",
         ingredients: "",
         isvegan: false,
-        type: -1
+        type: -1,
+        likes: 0,
+        imgURL: ""
       },
       types: resources.mealTypes,
-      submitted: false
+      submitted: false,
+      imageData: null,
+      picture: null,
+      uploadValue: 0
     };
   },
   validations: {
@@ -145,12 +152,57 @@ export default {
   methods: {
     handleSubmit() {
       this.submitted = true;
+
+      this.$v.$touch();
+      if (this.$v.$invalid || this.imageData == null) {
+        return;
+      }
+      this.onUpload();
+    },
+
+    previewImage(event) {
+      this.uploadValue = 0;
+      this.picture = null;
+      this.imageData = event.target.files[0];
+    },
+
+    onUpload() {
+      this.picture = null;
+      const storageRef = firebase
+        .storage()
+        .ref(`${this.imageData.name}`)
+        .put(this.imageData);
+      storageRef.on(
+        `state_changed`,
+        snapshot => {
+          this.uploadValue =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        error => {
+          console.log(error.message);
+        },
+        () => {
+          this.uploadValue = 100;
+          storageRef.snapshot.ref.getDownloadURL().then(url => {
+            console.log(url);
+            this.form.imgURL = url;
+            console.log(this.form);
+            RecipeService.addNew(this.form).then(() => {
+              this.$router.push({ path: "/" });
+            });
+          });
+        }
+      );
     }
   }
 };
 </script>
 
 <style scoped>
+img.preview {
+  width: 200px;
+}
+
 textarea {
   height: 200px !important;
 }
