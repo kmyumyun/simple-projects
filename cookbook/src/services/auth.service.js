@@ -31,15 +31,14 @@ function login(email, password, comp) {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then(data => {
+    .then(() => {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           localStorage.setItem("token", user.uid);
         }
       });
-      console.log(data);
       localStorage.setItem("user", email);
-      router.push({ name: "Home" });
+      router.push(comp.$route.query.returnURL || "/");
       comp.$bus.$emit("logged", "User has logged in!");
     })
     .catch(err => {

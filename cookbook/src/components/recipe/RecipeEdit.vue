@@ -66,20 +66,6 @@
             </div>
           </div>
         </div>
-        <div>
-          <div>
-            <label for="imgupload">Picture:</label>
-            <input
-              name="imgupload"
-              type="file"
-              @change="previewImage"
-              accept="image/*"
-            />
-          </div>
-          <div v-if="submitted && imageData == null" class="invalid-feedback">
-            Image is required
-          </div>
-        </div>
       </div>
       <div class="col-6">
         <div class="form-group">
@@ -96,6 +82,30 @@
             class="invalid-feedback"
           >
             Field is required
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row my-4 justify-content-center">
+      <div class="col-6">
+        <div v-if="form.imgURL">
+          <b-img :src="form.imgURL" fluid-grow alt></b-img>
+        </div>
+        <div>
+          <div class="align-items-center mt-2">
+            <label for="imgupload">Set new Picture:</label>
+            <input
+              name="imgupload"
+              type="file"
+              @change="previewImage"
+              accept="image/*"
+            />
+          </div>
+          <div
+            v-if="submitted && !(form.imgURL || this.imageData)"
+            class="invalid-feedback"
+          >
+            Image is required
           </div>
         </div>
       </div>
@@ -121,7 +131,7 @@
       </div>
     </div>
     <div class="form-group">
-      <button class="btn btn-primary">Create Recipe</button>
+      <button class="btn btn-primary">Update Recipe</button>
     </div>
   </form>
 </template>
@@ -133,7 +143,7 @@ import { RecipeService } from "../../services/recipe.service";
 import firebase from "firebase";
 
 export default {
-  name: "RecipeAdd",
+  name: "RecipeEdit",
   data() {
     return {
       form: {
@@ -171,9 +181,10 @@ export default {
       this.submitted = true;
 
       this.$v.$touch();
-      if (this.$v.$invalid || this.imageData == null) {
+      if (this.$v.$invalid || (!this.form.imgURL && !this.imageData)) {
         return;
       }
+
       this.onUpload();
     },
 
@@ -184,33 +195,58 @@ export default {
     },
 
     onUpload() {
-      this.picture = null;
-      const storageRef = firebase
-        .storage()
-        .ref(`${this.imageData.name}`)
-        .put(this.imageData);
-      storageRef.on(
-        `state_changed`,
-        snapshot => {
-          this.uploadValue =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        },
-        error => {
-          console.log(error.message);
-        },
-        () => {
-          this.uploadValue = 100;
-          storageRef.snapshot.ref.getDownloadURL().then(url => {
-            console.log(url);
-            this.form.imgURL = url;
-            console.log(this.form);
-            RecipeService.addNew(this.form).then(() => {
-              this.$router.push({ path: "/recipe" });
+      if (this.imageData) {
+        this.picture = null;
+        const storageRef = firebase
+          .storage()
+          .ref(`${this.imageData.name}`)
+          .put(this.imageData);
+        storageRef.on(
+          `state_changed`,
+          snapshot => {
+            this.uploadValue =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          },
+          error => {
+            console.log(error.message);
+          },
+          () => {
+            this.uploadValue = 100;
+            storageRef.snapshot.ref.getDownloadURL().then(url => {
+              console.log(url);
+              this.form.imgURL = url;
+              console.log(this.form);
+              RecipeService.updateRecipe(this.form, this.$route.params.id).then(
+                () => {
+                  this.$router.push({
+                    name: "details",
+                    params: { id: this.$route.params.id }
+                  });
+                }
+              );
             });
-          });
-        }
-      );
+          }
+        );
+      } else {
+        RecipeService.updateRecipe(this.form, this.$route.params.id).then(
+          () => {
+            this.$router.push({
+              name: "details",
+              params: { id: this.$route.params.id }
+            });
+          }
+        );
+      }
     }
+  },
+  created() {
+    RecipeService.getRecipe(this.$route.params.id).then(data => {
+      if (data) {
+        this.form = data;
+      } else {
+        this.$router.push({ path: "/" });
+      }
+    });
   }
 };
 </script>

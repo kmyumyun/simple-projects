@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="justify-content-end">
-      <h5>
+      <div class="add-field">
         <router-link class="nav-link" to="/recipe/add">
           <button>Add new Recipe</button>
         </router-link>
-      </h5>
+      </div>
     </div>
     <router-view></router-view>
   </div>
@@ -28,4 +28,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.add-field {
+  background-color: indianred;
+  margin-bottom: 20px;
+}
+</style>

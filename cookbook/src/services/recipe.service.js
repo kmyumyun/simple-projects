@@ -19,7 +19,12 @@ async function getAll() {
 }
 
 async function addNew(payload) {
+  payload.author = localStorage.getItem("user");
   await axiosDb.post(`/recipes.json`, payload);
+}
+
+async function updateRecipe(payload, id) {
+  await axiosDb.put(`/recipes/${id}.json`, payload);
 }
 
 async function getRecipe(id) {
@@ -28,8 +33,18 @@ async function getRecipe(id) {
   return res.data;
 }
 
+async function likeRecipe(id) {
+  this.getRecipe(id).then(data => {
+    let recipe = data;
+    recipe.likes += 1;
+    axiosDb.put(`/recipes/${id}.json`, recipe);
+  });
+}
+
 export const RecipeService = {
   getAll,
   addNew,
-  getRecipe
+  getRecipe,
+  updateRecipe,
+  likeRecipe
 };

@@ -4,15 +4,30 @@
       <div
         v-for="recipe in data"
         :key="recipe.id"
-        class="card col-6"
+        class="card col-6 pt-2"
         style="width: 18rem;"
       >
+        <img
+          height="200"
+          width="200"
+          class="card-img-top"
+          :src="recipe.imgURL"
+          alt="Card image cap"
+        />
         <div class="card-body">
-          <h5 class="card-title">{{ recipe.title }}</h5>
-          <p class="card-text">{{ recipe.bdescription }}</p>
-          <router-link :to="{ name: 'details', params: { id: recipe.id } }">
-            <a class="card-link">More...</a>
-          </router-link>
+          <h3 class="card-title">{{ recipe.title }}</h3>
+          <h6 class="card-text">{{ recipe.bdescription }}</h6>
+          <div class="row">
+            <div class="col-6">
+              <span>Likes: </span>
+              <span>{{ recipe.likes }}</span>
+            </div>
+            <div class="col-6">
+              <router-link :to="{ name: 'details', params: { id: recipe.id } }">
+                <a class="card-link">Details...</a>
+              </router-link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

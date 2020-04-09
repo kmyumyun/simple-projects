@@ -9,6 +9,7 @@ import RecipeAll from "../components/recipe/RecipeAll.vue";
 import RecipeAdd from "../components/recipe/RecipeAdd.vue";
 import Recipe from "../components/recipe/Recipe.vue";
 import RecipeDetails from "../components/recipe/RecipeDetails.vue";
+import RecipeEdit from "../components/recipe/RecipeEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -58,6 +59,11 @@ const routes = [
         path: "details/:id",
         name: "details",
         component: RecipeDetails
+      },
+      {
+        path: "edit/:id",
+        name: "edit",
+        component: RecipeEdit
       }
     ]
   }
@@ -69,7 +75,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const guestAreas = ["/", "/login", "/register"];
+  const guestAreas = ["/", "/login", "/register", "/recipe"];
   const isRestricted = !guestAreas.includes(to.path);
   const loggedIn = AuthService.isLogged();
 
@@ -81,7 +87,7 @@ router.beforeEach((to, from, next) => {
     return next({
       path: "/login",
       query: {
-        returnUrl: to.path
+        returnURL: to.path
       }
     });
   } else {
