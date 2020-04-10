@@ -1,29 +1,10 @@
-# cookbook
+# CookBook
 
-## Project setup
-```
-npm install
-```
+## Description
+CookBook is a recipe sharing website.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Goal
+For Vue JS project defence @SoftUni.
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Technologies
+Built using VueJS and Firebase.
