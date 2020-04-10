@@ -1,17 +1,31 @@
 <template>
   <div class="mb-4">
     <div class="row">
-      <div class="col-6 text-left">
+      <div class="col-8 text-left">
         <h3>{{ data.title }}</h3>
       </div>
-      <div class="col-6 text-right">
-        <div>
-          <span>Likes:</span>
-          <span>{{ data.likes }}</span>
-        </div>
-        <div class="author" v-if="data.author">
-          <span>Author:</span>
-          <span>{{ data.author }}</span>
+      <div class="col-4">
+        <div class="row text-right">
+          <div class="col-4 text-right">
+            <transition name="like">
+              <span
+                v-if="!liked"
+                @click="like"
+                class="ml-4 mt-1 btn btn-sm btn-primary"
+                >Like</span
+              >
+            </transition>
+          </div>
+          <div class="col-8 text-right">
+            <div>
+              <span>Likes:</span>
+              <span>{{ data.likes }}</span>
+            </div>
+            <div class="author" v-if="data.author">
+              <span>Author:</span>
+              <span>{{ data.author }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,10 +59,11 @@
         <p>{{ data.instructions }}</p>
       </div>
     </div>
-    <span v-if="!liked" @click="like" class="btn btn-primary">Like</span>
     <div v-if="data.author == user">
       <hr />
-      <router-link :to="{ name: 'edit', params: { id: this.$route.params.id } }">
+      <router-link
+        :to="{ name: 'edit', params: { id: this.$route.params.id } }"
+      >
         <span class="btnm btn-secondary btn-sm">Edit</span>
       </router-link>
     </div>
@@ -88,7 +103,7 @@ export default {
       if (data) {
         this.data = data;
       } else {
-        this.$router.push({ path: "/" });
+        this.$router.push({ name: "notfound" });
       }
     });
   }
@@ -117,5 +132,13 @@ export default {
   text-decoration: underline;
   font-size: 25px;
   font-weight: 600;
+}
+
+.like-enter-active,
+.like-leave-active {
+  transition: opacity 0.5s;
+}
+.like-enter, .like-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

@@ -19,7 +19,7 @@
           <h6 class="card-text">{{ recipe.bdescription }}</h6>
           <div class="row">
             <div class="col-6">
-              <span>Likes: </span>
+              <span>Likes:</span>
               <span>{{ recipe.likes }}</span>
             </div>
             <div class="col-6">
@@ -56,4 +56,5 @@ export default {
 .card {
   display: inline-block;
 }
+
 </style>

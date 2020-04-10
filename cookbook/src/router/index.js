@@ -10,6 +10,7 @@ import RecipeAdd from "../components/recipe/RecipeAdd.vue";
 import Recipe from "../components/recipe/Recipe.vue";
 import RecipeDetails from "../components/recipe/RecipeDetails.vue";
 import RecipeEdit from "../components/recipe/RecipeEdit.vue";
+import NotFound from "../components/error/NotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -28,15 +29,6 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
   },
   {
     path: "/register",
@@ -66,6 +58,11 @@ const routes = [
         component: RecipeEdit
       }
     ]
+  },
+  {
+    path: "*",
+    name: "notfound",
+    component: NotFound
   }
 ];
 
@@ -75,7 +72,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const guestAreas = ["/", "/login", "/register", "/recipe"];
+  const guestAreas = ["/", "/login", "/register", "/recipe", "/notfound"];
   const isRestricted = !guestAreas.includes(to.path);
   const loggedIn = AuthService.isLogged();
 

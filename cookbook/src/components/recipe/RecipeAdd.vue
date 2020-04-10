@@ -15,7 +15,13 @@
             v-if="submitted && !$v.form.title.required"
             class="invalid-feedback"
           >
-            Field is required
+            Title is required
+          </div>
+          <div
+            v-if="submitted && !$v.form.title.maxLength"
+            class="invalid-feedback"
+          >
+            Title is too long
           </div>
         </div>
         <div class="form-group">
@@ -31,7 +37,13 @@
             v-if="submitted && !$v.form.bdescription.required"
             class="invalid-feedback"
           >
-            Field is required
+            Brief Description is required
+          </div>
+          <div
+            v-if="submitted && !$v.form.bdescription.maxLength"
+            class="invalid-feedback"
+          >
+            Brief Description is too long
           </div>
         </div>
         <div class="row">
@@ -95,7 +107,19 @@
             v-if="submitted && !$v.form.ingredients.required"
             class="invalid-feedback"
           >
-            Field is required
+            Ingredients are required
+          </div>
+          <div
+            v-if="submitted && !$v.form.ingredients.maxLength"
+            class="invalid-feedback"
+          >
+            Ingredients are too long
+          </div>
+          <div
+            v-if="submitted && !$v.form.ingredients.minLength"
+            class="invalid-feedback"
+          >
+            Ingredients are too short
           </div>
         </div>
       </div>
@@ -115,7 +139,13 @@
             v-if="submitted && !$v.form.instructions.required"
             class="invalid-feedback"
           >
-            Field is required
+            Instructions are required
+          </div>
+          <div
+            v-if="submitted && !$v.form.instructions.minLength"
+            class="invalid-feedback"
+          >
+            Instructions are too short
           </div>
         </div>
       </div>
@@ -127,7 +157,7 @@
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
+import { required, maxLength, minLength } from "vuelidate/lib/validators";
 import resources from "../../resources/resources.json";
 import { RecipeService } from "../../services/recipe.service";
 import firebase from "firebase";
@@ -155,10 +185,14 @@ export default {
   },
   validations: {
     form: {
-      title: { required },
-      bdescription: { required },
-      instructions: { required },
-      ingredients: { required },
+      title: { required, maxLength: maxLength(30) },
+      bdescription: { required, maxLength: maxLength(50) },
+      instructions: { required, minLength: minLength(10) },
+      ingredients: {
+        required,
+        maxLength: maxLength(250),
+        minLength: minLength(5)
+      },
       type: {
         valid(value) {
           return value != -1;
@@ -201,9 +235,7 @@ export default {
         () => {
           this.uploadValue = 100;
           storageRef.snapshot.ref.getDownloadURL().then(url => {
-            console.log(url);
             this.form.imgURL = url;
-            console.log(this.form);
             RecipeService.addNew(this.form).then(() => {
               this.$router.push({ path: "/recipe" });
             });
