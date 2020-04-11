@@ -14,15 +14,11 @@
           <div
             v-if="submitted && !$v.form.title.required"
             class="invalid-feedback"
-          >
-            Title is required
-          </div>
+          >Title is required</div>
           <div
             v-if="submitted && !$v.form.title.maxLength"
             class="invalid-feedback"
-          >
-            Title is too long
-          </div>
+          >Title is too long</div>
         </div>
         <div class="form-group">
           <label for="bdescription">Brief Description</label>
@@ -36,44 +32,28 @@
           <div
             v-if="submitted && !$v.form.bdescription.required"
             class="invalid-feedback"
-          >
-            Brief Description is required
-          </div>
+          >Brief Description is required</div>
           <div
             v-if="submitted && !$v.form.bdescription.maxLength"
             class="invalid-feedback"
-          >
-            Brief Description is too long
-          </div>
+          >Brief Description is too long</div>
         </div>
         <div class="row">
           <div class="col-6">
             <div class="form-group">
               <select v-model="form.type" class="form-control">
                 <option selected disabled value="-1">Select type</option>
-                <option
-                  v-for="type in types"
-                  :key="type.name"
-                  :value="type.value"
-                  >{{ type.name }}</option
-                >
+                <option v-for="type in types" :key="type.name" :value="type.value">{{ type.name }}</option>
               </select>
               <div
                 v-if="submitted && !$v.form.type.valid"
                 class="invalid-feedback"
-              >
-                Field is required
-              </div>
+              >Field is required</div>
             </div>
           </div>
           <div class="col-6">
             <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                v-model="form.isvegan"
-                name="isvegan"
-              />
+              <input class="form-check-input" type="checkbox" v-model="form.isvegan" name="isvegan" />
               <label class="form-check-label" for="isvegan">Is Vegan?</label>
             </div>
           </div>
@@ -92,21 +72,15 @@
           <div
             v-if="submitted && !$v.form.ingredients.required"
             class="invalid-feedback"
-          >
-            Ingredients are required
-          </div>
+          >Ingredients are required</div>
           <div
             v-if="submitted && !$v.form.ingredients.maxLength"
             class="invalid-feedback"
-          >
-            Ingredients are too long
-          </div>
+          >Ingredients are too long</div>
           <div
             v-if="submitted && !$v.form.ingredients.minLength"
             class="invalid-feedback"
-          >
-            Ingredients are too short
-          </div>
+          >Ingredients are too short</div>
         </div>
       </div>
     </div>
@@ -117,20 +91,13 @@
         </div>
         <div>
           <div class="align-items-center mt-2">
-            <label for="imgupload">Set new Picture: </label>
-            <input
-              name="imgupload"
-              type="file"
-              @change="previewImage"
-              accept="image/*"
-            />
+            <label for="imgupload">Set new Picture:</label>
+            <input name="imgupload" type="file" @change="previewImage" accept="image/*" />
           </div>
           <div
             v-if="submitted && !(form.imgURL || this.imageData)"
             class="invalid-feedback"
-          >
-            Image is required
-          </div>
+          >Image is required</div>
         </div>
       </div>
     </div>
@@ -148,15 +115,11 @@
           <div
             v-if="submitted && !$v.form.instructions.required"
             class="invalid-feedback"
-          >
-            Instructions are required
-          </div>
+          >Instructions are required</div>
           <div
             v-if="submitted && !$v.form.instructions.minLength"
             class="invalid-feedback"
-          >
-            Instructions are too short
-          </div>
+          >Instructions are too short</div>
         </div>
       </div>
     </div>
@@ -275,7 +238,7 @@ export default {
   },
   created() {
     RecipeService.getRecipe(this.$route.params.id).then(data => {
-      if (data) {
+      if (data && data.author == localStorage.getItem("user")) {
         this.form = data;
       } else {
         this.$router.push({ name: "notfound" });
