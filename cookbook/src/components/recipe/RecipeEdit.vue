@@ -117,7 +117,7 @@
         </div>
         <div>
           <div class="align-items-center mt-2">
-            <label for="imgupload">Set new Picture:</label>
+            <label for="imgupload">Set new Picture: </label>
             <input
               name="imgupload"
               type="file"

@@ -44,7 +44,6 @@ export default {
   created() {
     this.$bus.$on("logged", () => {
       this.isLogged = AuthService.isLogged();
-      console.log("Bus: ", this.isLogged);
     });
   }
 };

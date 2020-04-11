@@ -1,7 +1,7 @@
 <template>
   <div class="jumbotron home mb-0">
-    <div class="home text-left" v-if="user">
-      <h1>Hello, {{ user }}!</h1>
+    <div class="home text-left" v-if="isLogged">
+      <h1>Hello, {{ getUser }}!</h1>
       <h3>Welcome to CookBook!</h3>
       <h5>As a logged user you can:</h5>
       <ul>
@@ -9,7 +9,7 @@
         <li>Edit your recipes.</li>
       </ul>
     </div>
-    <div class="home text-left" v-if="!user">
+    <div class="home text-left" v-else>
       <h1>Hello, Guest!</h1>
       <h3>Welcome to CookBook!</h3>
       <h5>To use this website fully, please:</h5>
@@ -17,7 +17,9 @@
         <li>
           <span>
             First
-            <router-link class="nav-link" to="/register">Create A New Account!</router-link>
+            <router-link class="nav-link" to="/register"
+              >Create A New Account!</router-link
+            >
           </span>
         </li>
         <li>
@@ -32,14 +34,16 @@
 </template>
 
 <script>
+import { AuthService } from "../services/auth.service";
+
 export default {
   name: "Home",
   data() {
     return {
-      user: this.getUser()
+      isLogged: AuthService.isLogged()
     };
   },
-  methods: {
+  computed: {
     getUser() {
       const userEmail = localStorage.getItem("user");
 

@@ -47,7 +47,6 @@ export default {
   methods: {},
   created() {
     RecipeService.getAll().then(x => (this.data = x));
-    console.log(this.data);
   }
 };
 </script>
@@ -56,5 +55,4 @@ export default {
 .card {
   display: inline-block;
 }
-
 </style>

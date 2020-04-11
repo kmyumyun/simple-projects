@@ -64,8 +64,6 @@ export default {
       if (this.$v.$invalid) {
         return;
       }
-      console.log(this.form.email);
-      console.log(this.form.password);
       AuthService.login(this.form.email, this.form.password, this);
     }
   }
